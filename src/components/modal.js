@@ -17,3 +17,21 @@ function closeEscape(evt) {
     closeModal(openedPopup);
   }
 }
+
+// Функция закрытия модального окна по клику на оверлей
+export function setCloseModalByClickListeners(popupList) {
+  popupList.forEach((popup) => {
+    // Находим кнопку закрытия окна
+    const closeButton = popup.querySelector(".popup__close");
+    // Добавляем обработчик слушателя для закрытия окна
+    closeButton.addEventListener("click", () => {
+      closeModal(popup);
+    });
+    // Добавление обработчика слушателя закрытия окна по оверлею
+    popup.addEventListener("click", (evt) => {
+      if (evt.target === popup) {
+        closeModal(popup);
+      }
+    });
+  });
+}

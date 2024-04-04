@@ -1,4 +1,3 @@
-import { openModal } from "./modal.js";
 export const initialCards = [
   {
     name: "Архыз",
@@ -40,11 +39,16 @@ export function createCard(card, deleteCard, likeCard, openCard) {
   cardTitle.textContent = card.name;
   /* Устанавливаем атрибуты source и alt изображения карты для ссылки на карту и ее названия */
   const cardImage = cardElement.querySelector(".card__image");
-  cardImage.setAttribute("src", card.link);
-  cardImage.setAttribute("alt", card.name);
+  cardImage.src = card.link;
+  cardImage.alt = card.name;
   /*Получаем кнопку удаления и добавляем к ней прослушиватель событий, который вызывает функцию deleteCard при нажатии*/
   const deleteButton = cardElement.querySelector(".card__delete-button");
   deleteButton.addEventListener("click", deleteCard);
+  /**Получаем кнопку лайка по картчоке */
+  const likeButtons = cardElement.querySelector(".card__like-button");
+  likeButtons.addEventListener("click", likeCard);
+  // Добавляем прослушиватель событий к каждой картинке для открытия её
+  cardImage.addEventListener("click", openCard);
   /*Возвращаем элемент card*/
   return cardElement;
 }
@@ -57,16 +61,4 @@ export function likeCard(evt) {
 /* функция 'removeCard', которая удаляет ближайший элемент с классом 'card' при вызове.*/
 export function removeCard(event) {
   event.target.closest(".card").remove();
-}
-
-// Попап для картинки
-const imagePopup = document.querySelector(".popup_type_image");
-const imageInPopup = imagePopup.querySelector(".popup__image");
-const popupCaption = imagePopup.querySelector(".popup__caption");
-
-export function openCard(evt) {
-  imageInPopup.src = evt.target.src;
-  imageInPopup.alt = evt.target.alt;
-  popupCaption.textContent = evt.target.alt;
-  openModal(imagePopup);
 }
