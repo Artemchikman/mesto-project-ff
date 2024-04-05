@@ -1,5 +1,6 @@
 import "../styles/index.css";
-import { initialCards, likeCard, createCard, removeCard } from "./cards.js";
+import { initialCards } from "./cards.js";
+import { likeCard, createCard, removeCard } from "./card.js";
 import {
   openModal,
   closeModal,
@@ -67,7 +68,7 @@ initialCards.forEach(function (card) {
 setCloseModalByClickListeners(popups);
 // Обработчик «отправки» формы, хотя пока
 // она никуда отправляться не будет
-function editFormProfile(evt) {
+function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   // Получите значение полей jobInput и nameInput из свойства value
   const newName = nameInput.value;
@@ -80,7 +81,7 @@ function editFormProfile(evt) {
 
 // Прикрепляем обработчик к форме:
 // он будет следить за событием “submit” - «отправка»
-formEditProfile.addEventListener("submit", editFormProfile);
+formEditProfile.addEventListener("submit", handleProfileFormSubmit);
 //Константа поиска попапа создания карточки
 const popupAddCard = document.querySelector(".popup_type_new-card");
 //Добавление карточки в начало и сама форма для добавления карточки
@@ -97,8 +98,7 @@ function handleAddCardFormSubmit(evt) {
   cardsContainer.prepend(cardClone);
   closeModal(popupAddCard);
   // Очистка полей формы
-  placeNameInput.value = "";
-  linkInput.value = "";
+  newPlaceForm.reset();
 }
 newPlaceForm.addEventListener("submit", handleAddCardFormSubmit);
 // Функция открытия Popup, Попап для картинки
@@ -116,9 +116,12 @@ addProfileButton.addEventListener("click", function () {
 });
 // Добавьте прослушиватель событий к кнопке открытия
 buttonOpenEditProfilePopup.addEventListener("click", function () {
+  // Вставляем текущие данные профиля в инпуты формы
+  nameInput.value = profileName.textContent;
+  jobInput.value = profileJob.textContent;
   openModal(popupTypeEdit);
 });
-//Зарытие модального окна по клику на крестик
-buttonClosePopupEdit.addEventListener("click", function () {
-  closeModal(popupTypeEdit);
-});
+// //Зарытие модального окна по клику на крестик
+// buttonClosePopupEdit.addEventListener("click", function () {
+//   closeModal(popupTypeEdit);
+// });
