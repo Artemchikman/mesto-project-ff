@@ -6,15 +6,8 @@ import {
   closeModal,
   setCloseModalByClickListeners,
 } from "./modal.js";
-// @todo: Темплейт карточки
-
-// @todo: DOM узлы
-
-// @todo: Функция создания карточки
-
-// @todo: Функция удаления карточки
-
-// @todo: Вывести карточки на страницу
+import {enableValidation, clearValidation} from "./validation.js";
+import {addNewCard,errorResponse,getEditProfile, getUserInfo, getCardInfo} from "./api.js";
 
 // Получаем элемент с классом 'places__list' */
 const cardsContainer = document.querySelector(".places__list");
@@ -38,7 +31,7 @@ const addProfileButton = document.querySelector(".profile__add-button");
 const buttonClosePopupEdit = popupTypeEdit.querySelector(".popup__close");
 //Переменная для попапов
 const popups = document.querySelectorAll(".popup");
-// Находим форму в DOM
+//Получаем форму редактирования профиля
 const editFormElementProfile = document.querySelector(".popup__form"); // Воспользуйтесь методом querySelector()
 // Находим поля формы в DOM
 const nameInput = editFormElementProfile.querySelector(
@@ -98,7 +91,7 @@ function handleAddCardFormSubmit(evt) {
   cardsContainer.prepend(cardClone);
   closeModal(popupAddCard);
   // Очистка полей формы
-  newPlaceForm.reset();
+  newPlaceForm.reset;
 }
 newPlaceForm.addEventListener("submit", handleAddCardFormSubmit);
 // Функция открытия Popup, Попап для картинки
@@ -121,7 +114,34 @@ buttonOpenEditProfilePopup.addEventListener("click", function () {
   jobInput.value = profileJob.textContent;
   openModal(popupTypeEdit);
 });
-// //Зарытие модального окна по клику на крестик
-// buttonClosePopupEdit.addEventListener("click", function () {
-//   closeModal(popupTypeEdit);
-// });
+
+/*******************************************/
+/***************************************** */
+// Вызовем функцию
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error'
+}); 
+
+Promise.all([getUserInfo(), getCardInfo()])
+.then(([userData, cardData]) =>{
+  //обработка данных пользователя
+  profileName.textContent = userData.name;
+    profileJob.textContent = userData.about;
+    
+    // Очищаем контейнер для карточек перед добавлением новых
+    cardsContainer.innerHTML = '';
+
+    // Добавляем карточки на страницу
+    cardData.forEach(card => {
+      const newCard = createCard(card, removeCard, likeCard, openCard);
+      cardsContainer.appendChild(newCard);
+    });
+  })
+  .catch(error => {
+    console.error('Ошибка загрузки данных:', error);
+});
+

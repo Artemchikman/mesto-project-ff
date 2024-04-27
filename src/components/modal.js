@@ -1,14 +1,15 @@
 // Попап через кнопку редактировать >>>
 export function openModal(popup) {
   popup.classList.add("popup_is-opened");
+  clearValidation(popup);
   document.addEventListener("keydown", closeEscape);
-}
+};
 
-//Закрытие моадльногоона
+//Закрытие модального окна
 export function closeModal(popup) {
   popup.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", closeEscape);
-}
+};
 
 // Закрытие модального окна через Escape
 function closeEscape(evt) {
@@ -16,7 +17,7 @@ function closeEscape(evt) {
     const openedPopup = document.querySelector(".popup_is-opened");
     closeModal(openedPopup);
   }
-}
+};
 
 // Функция закрытия модального окна по клику на оверлей
 export function setCloseModalByClickListeners(popupList) {
@@ -34,4 +35,19 @@ export function setCloseModalByClickListeners(popupList) {
       }
     });
   });
-}
+};
+// // Очистка ошибок валидации на форме
+// export function clearValidationErrors(form) {
+//   const errorMessages = form.querySelectorAll(".popup__form"); // Пока не поятно, нужно оно или нет
+//   errorMessages.forEach((errorMessage) => {
+//     errorMessage.textContent = "";
+//   });
+// };
+
+// Функция для сброса значений в полях формы
+const clearValidation = (form) => {
+  const inputList = Array.from(form.querySelectorAll('.popup__input'));
+  inputList.forEach((input) => {
+    input.value = '';
+  });
+};
