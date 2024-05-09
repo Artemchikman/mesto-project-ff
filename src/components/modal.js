@@ -1,7 +1,6 @@
 // Попап через кнопку редактировать >>>
 export function openModal(popup) {
   popup.classList.add("popup_is-opened");
-  clearValidation(popup);
   document.addEventListener("keydown", closeEscape);
 };
 
@@ -34,20 +33,5 @@ export function setCloseModalByClickListeners(popupList) {
         closeModal(popup);
       }
     });
-  });
-};
-// // Очистка ошибок валидации на форме
-// export function clearValidationErrors(form) {
-//   const errorMessages = form.querySelectorAll(".popup__form"); // Пока не поятно, нужно оно или нет
-//   errorMessages.forEach((errorMessage) => {
-//     errorMessage.textContent = "";
-//   });
-// };
-
-// Функция для сброса значений в полях формы
-const clearValidation = (form) => {
-  const inputList = Array.from(form.querySelectorAll('.popup__input'));
-  inputList.forEach((input) => {
-    input.value = '';
   });
 };

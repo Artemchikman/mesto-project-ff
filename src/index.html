@@ -36,12 +36,12 @@
       <div class="popup__content">
         <button type="button" class="popup__close"></button>
         <h3 class="popup__title">Редактировать профиль</h3>
-        <form class="popup__form" name="edit-profile" novalidate> <!--Добавить позже method="post"-->
+        <form class="popup__form" name="edit-profile" novalidate> 
           <input id="name" type="text" name="name" class="popup__input popup__input_type_name" placeholder="Имя"
-            required minlength="2" maxlength="40" />
+            required minlength="2" maxlength="40" pattern="^[a-zA-Zа-яА-ЯЁё\s\-]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"/>
           <span class="name-error popup__error_visible"></span>
           <input id="description" type="text" name="description" class="popup__input popup__input_type_description"
-            placeholder="Занятие" required minlength="2" maxlength="200" />
+            placeholder="Занятие" required minlength="2" maxlength="200" pattern="^[a-zA-Zа-яА-ЯЁё\s\-]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"/>
           <span class="description-error popup__error_visible"></span>
           <button type="submit" class="button popup__button">
             Сохранить
@@ -53,12 +53,12 @@
       <div class="popup__content">
         <button type="button" class="popup__close"></button>
         <h3 class="popup__title">Новое место</h3>
-        <form class="popup__form" name="new-place" novalidate> <!--Добавить позже method="post"-->
+        <form class="popup__form" name="new-place" novalidate>
           <input id="input-name" type="text" name="place-name" class="popup__input popup__input_type_card-name"
-            placeholder="Название" required minlength="2" maxlength="30" />
+            placeholder="Название" required minlength="2" maxlength="30" pattern="^[a-zA-Zа-яА-ЯЁё\s\-]+$"  data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" />
           <span class="input-name-error popup__error_visible"></span>
           <input id="url" type="url" name="link" class="popup__input popup__input_type_url" placeholder="Ссылка на картинку"
-            required />
+            required data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"/>
           <span class="url-error popup__error_visible"></span>
           <button type="submit" class="button popup__button">
             Сохранить
