@@ -27,3 +27,41 @@
     background-size: 8px 8px;
   }
 }
+.profile__image-section {
+  position: relative; 
+}
+
+.profile_edit_avatar {
+  position: absolute; 
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  left: 50px;
+  background-color: transparent; 
+  border: none; 
+  cursor: pointer; 
+  background:transparent url('../../../images/image.svg') center no-repeat;
+  width: 26px;
+  height: 26px;
+}
+
+.profile_edit_avatar:hover {
+  background-color: rgba(0, 0, 0, 0.1); 
+  opacity: 0.5; 
+}
+.profile_edit_avatar::after {
+  position: absolute; 
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  left: 50px;
+  background-color: transparent; 
+  border: none; 
+  cursor: pointer; 
+  background:transparent url('../../../images/image.svg') center no-repeat;
+  width: 26px;
+  height: 26px;
+}
+.profile_edit_avatar::before {
+opacity: 0.5;
+}

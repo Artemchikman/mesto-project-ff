@@ -54,6 +54,22 @@ export function getCardInfo() {
     });
  };
 
+   // Обновление аватара пользователя
+   export function updateAvatar(link){
+    return fetch(`${config.baseUrl}/users/me/avatar`,{
+        method: "PATCH",
+        headers: config.headers,
+        body: JSON.stringify({
+            avatar: link,
+        }),
+    }).then((res) => {
+        if (res.ok) {
+            return res.json(); // Вернуть JSON данные в случае успеха
+        }
+        return errorResponse(res, "Ошибка при обновлении аватара");
+    });
+ };
+
 /*Добавление новой карточки */
 export function addNewCard (name, link) {
     return fetch(`${config.baseUrl}/cards`, {
@@ -103,3 +119,4 @@ export function removeLikeCard(cardId) {
     });
   };
   
+
