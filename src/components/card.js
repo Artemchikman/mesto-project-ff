@@ -2,7 +2,7 @@ import { addLikeCard,removeLikeCard,deleteNewCard } from "./api.js";
 /* Получаем элемент шаблона с идентификатором 'card-template', а затем первый дочерний элемент .card*/ 
 const templateElement = document.querySelector("#card-template").content.querySelector(".card"); 
 /* Создаем новый элемент карточки путем клонирования элемента шаблона и возвращаем его*/ 
-export function createCard(card, userId, deleteCard, likeCard, openCard) { 
+export function createCard(card, deleteCard, likeCard, openCard, currentUserId) { 
   //Функция создания карточки 
   /* Клонирует элемент шаблона*/ 
   const cardElement = templateElement.cloneNode(true); 
@@ -14,34 +14,25 @@ export function createCard(card, userId, deleteCard, likeCard, openCard) {
   cardImage.src = card.link; 
   cardImage.alt = card.name; 
   const cardId = card._id;
-  /*Получаем кнопку удаления и добавляем к ней прослушиватель событий, который вызывает функцию deleteCard при нажатии*/ 
-  const deleteButton = cardElement.querySelector(".card__delete-button"); 
-  // deleteButton.addEventListener("click", function() {
-  //   deleteCard(cardId, cardElement);
-  // }); 
-  const meLikeAdd = card.likes.some((like) => like._id === userId);
-  console.log(userId)
-  if (meLikeAdd) {
-    likeButton.classList.add("card__like-button_is-active");
-  }
-
-  if (card.owner._id !== userId) {
-    deleteButton.remove();
-  } else {
-    deleteButton.addEventListener("click", () => {
-      deleteCard(cardId, cardElement);
-    });
-  }
+  // Добавляем прослушиватель событий к каждой картинке для открытия её 
+  cardImage.addEventListener("click", openCard); 
   /**Получаем кнопку лайка по карточке */ 
   const likeButton = cardElement.querySelector(".card__like-button"); 
   const cardLikeCount = cardElement.querySelector(".card__like-count");
   cardLikeCount.textContent = card.likes.length;
-    //Слушатель для кнопки лайка
+  //Слушатель для кнопки лайка
   likeButton.addEventListener("click", function() {
-    likeCard(likeButton, cardLikeCount, cardId);
+  likeCard(likeButton, cardLikeCount, cardId);
   }); 
-  // Добавляем прослушиватель событий к каждой картинке для открытия её 
-  cardImage.addEventListener("click", openCard); 
+  /*Получаем кнопку удаления и добавляем к ней прослушиватель событий, который вызывает функцию deleteCard при нажатии*/ 
+  const deleteButton = cardElement.querySelector(".card__delete-button"); 
+  if (card.owner._id !== currentUserId) {
+    deleteButton.style.display = "none";
+  } else {
+  deleteButton.addEventListener("click", function() {
+    deleteCard(cardId, cardElement);
+  }); 
+}
   /*Возвращаем элемент card*/ 
   return cardElement; 
 };
