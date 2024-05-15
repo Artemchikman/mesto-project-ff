@@ -35,12 +35,12 @@ const popups = document.querySelectorAll(".popup");
 /*==================================================================================*/
 /*Переменные для редактирвоания профиля*/
 //Получаем форму редактирования профиля
-const editFormElementProfile = document.querySelector(".popup__form"); // Воспользуйтесь методом querySelector()
+const FormEditElementProfile = document.querySelector(".popup__form"); // Воспользуйтесь методом querySelector()
 // Находим поля формы в DOM
-const nameInput = editFormElementProfile.querySelector(
+const nameInput = FormEditElementProfile.querySelector(
   ".popup__input_type_name"
 ); // Воспользуйтесь инструментом .querySelector()
-const jobInput = editFormElementProfile.querySelector(
+const jobInput = FormEditElementProfile.querySelector(
   ".popup__input_type_description"
 ); // Воспользуйтесь инструментом .querySelector()
 const formEditProfile = document.forms["edit-profile"];
@@ -62,14 +62,15 @@ const avatarInput = document.querySelector(".popup__input_type_avatar");
 const buttonEditAvatar = editAvatar.querySelector(".popup__button");
 const imageSection = document.querySelector(".profile__image-section");
 //Функция загрузки
-function loadingButtonSave(loading, button) {
-  button.textContent = loading ? "Сохранение..." : "Сохранить";
-}
+function loadingButtonSave(loading, button, content) {
+  button.textContent = loading ? content : "";
+};
+
 /*Функция для изменения аватара*/
 function handleEditAvatarFormSubmit(evt) {
   evt.preventDefault();
   // const avatarUrl = avatarInput.value;
-  loadingButtonSave(true, buttonEditAvatar);
+  loadingButtonSave(true, buttonEditAvatar, "Сохранение...");
   updateAvatar(evt.target.link.value)
     .then((data) => {
       profileImage.src = data.avatar; // Обновление изображения профиля
@@ -80,7 +81,7 @@ function handleEditAvatarFormSubmit(evt) {
       console.error("Ошибка при изменении аватара:", err);
     })
     .finally(() => {
-      loadingButtonSave(false, buttonEditAvatar);
+      loadingButtonSave(false, buttonEditAvatar, "Сохранение...");
     });
 }
 editAvatarForm.addEventListener("submit", handleEditAvatarFormSubmit);
@@ -96,7 +97,7 @@ setCloseModalByClickListeners(popups);
 /* Функция обработчика редактирования формы профиля */
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
-  loadingButtonSave(true, buttonSaveEditProfile);
+  loadingButtonSave(true, buttonSaveEditProfile, "Сохранение...");
   getEditProfile(evt.target.name.value, evt.target.description.value)
     .then((user) => {
       profileName.textContent = user.name;
@@ -107,9 +108,9 @@ function handleProfileFormSubmit(evt) {
       console.log("Ошибка при редактировании профиля:" + "" + err);
     })
     .finally(() => {
-      loadingButtonSave(false, buttonSaveEditProfile);
+      loadingButtonSave(false, buttonSaveEditProfile, "Сохранение...");
     });
-}
+};
 
 // Прикрепляем обработчик к форме: // он будет следить за событием “submit” - «отправка»
 formEditProfile.addEventListener("submit", handleProfileFormSubmit);
@@ -119,25 +120,30 @@ const popupAddCard = document.querySelector(".popup_type_new-card");
 //Добавление карточки в начало и сама форма для добавления карточки
 function handleAddCardFormSubmit(evt) {
   evt.preventDefault();
-  loadingButtonSave(true, buttonSaveAddCard);
+  loadingButtonSave(true, buttonSaveAddCard, "Сохранение...");
   const placeName = placeNameInput.value;
   const linkUrl = linkInput.value;
   addNewCard(placeName, linkUrl)
     .then((card) => {
-      const cardClone = createCard(card, deleteCard, likeCard, openCard);
+      const cardClone = createCard(
+        card,
+        deleteCard,
+        likeCard,
+        openCard,
+        card.owner._id
+      );
       cardsContainer.prepend(cardClone);
-      closeModal(popupAddCard);
       newPlaceForm.reset();
+      closeModal(popupAddCard);
     })
     .catch((err) => {
       console.error("Ошибка при добавлении карточки:", err);
     })
     .finally(() => {
-      loadingButtonSave(false, buttonSaveAddCard);
-      newPlaceForm.reset();
+      loadingButtonSave(false, buttonSaveAddCard, "Сохранение...");
       closeModal(popupNewCard);
     });
-}
+};
 
 newPlaceForm.addEventListener("submit", handleAddCardFormSubmit);
 // Функция открытия Popup, Попап для картинки
@@ -146,7 +152,7 @@ export function openCard(evt) {
   imageInPopup.alt = evt.target.alt;
   popupCaption.textContent = evt.target.alt;
   openModal(imagePopup);
-}
+};
 // Попап через кнопку плюс >>>
 // Добавляем прослушиватель событий к кнопке открытия
 addProfileButton.addEventListener("click", function () {
@@ -155,11 +161,20 @@ addProfileButton.addEventListener("click", function () {
 });
 // Добавьте прослушиватель событий к кнопке открытия для профиля редактирования
 buttonOpenEditProfilePopup.addEventListener("click", function () {
+  getUserInfo()
+    .then((userData) => {
+      // Открываем модальное окно профиля и передаем данные пользователя
+      openModal(popupTypeEdit, userData);
+    })
+    .catch((error) => {
+      console.error("Ошибка загрузки данных пользователя:", error);
+      // Если возникла ошибка, открываем модальное окно профиля без данных пользователя
+      openModal(popupTypeEdit, null);
+    });
   clearValidation(formEditProfile, validationConfig);
-  openModal(popupTypeEdit);
+  // openModal(popupTypeEdit);
 });
 
-/*******************************************/
 /***************************************** */
 // Конфиг валидации
 const validationConfig = {
@@ -171,13 +186,14 @@ const validationConfig = {
   errorClass: "popup__error_visible",
 };
 enableValidation(validationConfig);
-
+// let userId;
 Promise.all([getUserInfo(), getCardInfo()])
   .then(([user, card]) => {
     //обработка данных пользователя
     profileName.textContent = user.name;
     profileJob.textContent = user.about;
     profileImage.src = user.avatar;
+    // userId = user._id;
     // Очищаем контейнер для карточек перед добавлением новых
     cardsContainer.innerHTML = "";
     // Добавляем карточки на страницу

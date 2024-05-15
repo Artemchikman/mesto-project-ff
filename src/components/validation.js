@@ -1,5 +1,10 @@
 // Функция, которая добавляет класс с ошибкой
-const showInputError = (formElement, inputElement,errorMessage,validationConfig) => {
+const showInputError = (
+  formElement,
+  inputElement,
+  errorMessage,
+  validationConfig
+) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.add(validationConfig.inputErrorClass);
   errorElement.textContent = errorMessage;
@@ -19,8 +24,17 @@ const isValid = (formElement, formInput, validationConfig) => {
   const saveButton = formElement.querySelector(
     validationConfig.submitButtonSelector
   );
+  const inputList = Array.from(
+    formElement.querySelectorAll(validationConfig.inputSelector)
+  );
+  const isFormEmpty = inputList.every((input) => input.value.trim() === "");
+  if (isFormEmpty) {
+    saveButton.disabled = true;
+    saveButton.style.backgroundColor = "#00000026";
+    return false;
+  }
   const customErrorMessage =
-    formInput.getAttribute("data-error-message") || formInput.validationMessage;
+    formInput.dataset.errorMessage || formInput.validationMessage;
 
   // Проверяем все возможные ошибки валидации
   if (!formInput.validity.valid) {
@@ -73,6 +87,8 @@ const setEventListeners = (formElement, validationConfig) => {
         saveButton.style.backgroundColor = "";
       }
     });
+    // Проверяем валидность сразу при инициализации
+    isValid(formElement, inputElement, validationConfig);
   });
 };
 
