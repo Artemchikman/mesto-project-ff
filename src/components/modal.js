@@ -1,17 +1,7 @@
 // Попап через кнопку редактировать >>>
-export function openModal(popup, userData) {
+export function openModal(popup) {
   popup.classList.add("popup_is-opened");
   document.addEventListener("keydown", closeEscape);
-
-  // Заполнение полей формы данными текущего пользователя, если они переданы
-  if (userData) {
-    const nameInput = popup.querySelector(".popup__input_type_name");
-    const descriptionInput = popup.querySelector(
-      ".popup__input_type_description"
-    );
-    nameInput.value = userData.name || "";
-    descriptionInput.value = userData.about || "";
-  }
 }
 
 //Закрытие модального окна

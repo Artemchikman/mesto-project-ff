@@ -102,13 +102,12 @@ export const enableValidation = (validationConfig) => {
   });
 };
 
-// Функция для сброса значений в полях формы
+// Функция для сброса значений в полях формы и скрытия ошибок валидации
 export const clearValidation = (formElement, validationConfig) => {
   const inputList = Array.from(
     formElement.querySelectorAll(validationConfig.inputSelector)
   );
   inputList.forEach((input) => {
-    input.value = "";
     input.setCustomValidity("");
     hideInputError(formElement, input, validationConfig); // скрываем ошибки валидации при очистке полей
   });
