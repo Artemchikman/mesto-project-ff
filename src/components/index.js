@@ -33,23 +33,22 @@ const buttonAddProfile = document.querySelector(".profile__add-button");
 const buttonSaveAddCard = popupNewCard.querySelector(".popup__button");
 // Переменная для попапов
 const popups = document.querySelectorAll(".popup");
-// Переменные для редактирования профиля
-const formEditElementProfile = document.querySelector(".popup__form");
-const nameInput = formEditElementProfile.querySelector(".popup__input_type_name");
-const descriptionInput = formEditElementProfile.querySelector(
-  ".popup__input_type_description"
-);
+// // Переменные для редактирования профиля
 const formEditProfile = document.forms["edit-profile"];
 const profileName = document.querySelector(".profile__title");
 const profileJob = document.querySelector(".profile__description");
+const nameInput = formEditProfile.querySelector(".popup__input_type_name");
+const descriptionInput = formEditProfile.querySelector(
+  ".popup__input_type_description"
+);
 // Переменные для попапа картинки
 const imagePopup = document.querySelector(".popup_type_image");
 const imageInPopup = imagePopup.querySelector(".popup__image");
 const popupCaption = imagePopup.querySelector(".popup__caption");
 const buttonSaveEditProfile = popupTypeEdit.querySelector(".popup__button");
 // Переменные для редактирования аватара
-const profileImage = document.querySelector(".profile__image");
 const editAvatar = document.querySelector(".popup_type_avatar");
+const profileImage = document.querySelector(".profile__image");
 const formEditAvatar = document.forms["avatar-profile"];
 const buttonEditAvatar = editAvatar.querySelector(".popup__button");
 const imageSection = document.querySelector(".profile__image-section");
@@ -150,7 +149,7 @@ buttonOpenEditProfilePopup.addEventListener("click", function () {
   // Получаем текущие значения полей профиля из разметки
   const currentName = profileName.textContent;
   const currentDescription = profileJob.textContent;
-    nameInput.value = currentName;
+  nameInput.value = currentName;
   descriptionInput.value = currentDescription;
   console.log(nameInput.value);
   // Сброс валидации при открытии модального окна
